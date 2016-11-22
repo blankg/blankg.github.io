@@ -38,7 +38,7 @@
         componentDidMount: function(){
             if (window.location.hash && window.location.hash.indexOf('#access_token=') > -1) {
               //get access token
-              var accessToken = window.location.hash.match(/\#(?:access_token)\=([\S\s]*?)\&/)[1];
+              var accessToken = window.location.href.match(/\#(?:access_token)\=([\S\s]*?)\&/)[1];
             }
             else {
               window.location = 'https://www.instagram.com/oauth/authorize/?client_id=a371671843a147b49b4ad498bd6c052f&redirect_uri=https://blankg.github.io/donuts&response_type=token';
