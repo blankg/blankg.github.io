@@ -45,7 +45,7 @@
               window.location = 'https://www.instagram.com/oauth/authorize/?client_id=a371671843a147b49b4ad498bd6c052f&redirect_uri=https://blankg.github.io/donuts&response_type=token';
             }
             var self = this;
-            var url = 'https://api.instagram.com/v1/users/self/media/recent/?access_token=' + accessToken + '&count=10';
+            var url = 'https://api.instagram.com/v1/users/self/media/recent/?access_token=' + accessToken + '&count=10&callback=?';
 
             $.getJSON(url, function(result){
 
