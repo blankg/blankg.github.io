@@ -1,0 +1,17 @@
+body{
+    padding:20px;
+    text-align: center;
+}
+
+h1{
+    font-size: 18px;
+    margin-bottom: 30px;
+    padding-top: 20px;
+}
+
+div.picture{
+    display: inline-block;
+    margin: 5px;
+    cursor:pointer;
+    position: relative;
+}
