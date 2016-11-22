@@ -1,0 +1,101 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Donuts for all</title>
+  </head>
+  <body>
+    <h1>Work in progress</h1>
+    <div id="container">
+      
+    </div>
+    
+    <script src="https://unpkg.com/react@15/dist/react.min.js"></script>
+    <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script type="text/babel">
+      var Picture = React.createClass({
+
+        clickHandler: function(){
+            this.props.onClick(this.props.ref);
+        },
+
+        render: function(){
+            var cls = 'picture ' + (this.props.favorite ? 'favorite' : '');
+            return (
+                <div className={cls} onClick={this.clickHandler}>
+                    <img src={this.props.src} width="200" title={this.props.title} />
+                </div>
+            );
+        }
+    });
+    
+    var PictureList = React.createClass({
+
+        getInitialState: function(){
+            return { pictures: [] };
+        },
+
+        componentDidMount: function(){
+            if (window.location.hash && window.location.hash.indexOf('#access_token=') > -1) {
+              //get access token
+              var accessToken = window.location.hash.substring(window.location.hash.indexOf('#access_token=') + '#access_token='.length, window.location.hash.length);
+            }
+            else {
+              window.location = 'https://www.instagram.com/oauth/authorize/?client_id=a371671843a147b49b4ad498bd6c052f&redirect_uri=https://blankg.github.io&response_type=token';
+            }
+            var self = this;
+            var url = 'https://api.instagram.com/v1/users/self/media/recent/?access_token=' + accessToken + '&count=10&callback=?';
+
+            $.getJSON(url, function(result){
+
+                if(!result || !result.data || !result.data.length){
+                    return;
+                }
+
+                var pictures = result.data.map(function(p){
+
+                    return { 
+                        id: p.id, 
+                        url: p.link, 
+                        src: p.images.low_resolution.url, 
+                        title: p.caption ? p.caption.text : ''
+                    };
+
+                });
+
+                self.setState({ pictures: pictures });
+            });
+
+        },
+
+        render: function() {
+
+            var self = this;
+
+            var pictures = this.state.pictures.map(function(p){
+                return <Picture ref={p.id} src={p.src} title={p.title} favorite={p.favorite} onClick={self.pictureClick} />
+            });
+
+            if(!pictures.length){
+                pictures = <p>Loading images..</p>;
+            }
+
+            return (
+
+                <div>
+                    <h1>Donuts!!!!</h1>
+                    <div className="pictures"> {pictures} </div>
+                </div>
+
+            );
+        }
+    });
+    
+    ReactDOM.render(
+        <PictureList />,
+        document.body
+    );
+    </script>
+  </body>
+</html>
